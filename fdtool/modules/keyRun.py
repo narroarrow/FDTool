@@ -1,4 +1,4 @@
-from dbschema import dbschema
+from .dbschema import dbschema
 from string import ascii_lowercase
 # This function
 # takes in well-formatted FDs
@@ -16,19 +16,12 @@ def f(U, alphaString, FD_Store):
     (attrs,abhh) = dbschema.ScanAttrAbh(attrastxt, abhastxt)
     abhh=dbschema.mincoverage(abhh)
     (primattr, keys) = dbschema.keysTreeAlg(attrs, abhh, 2)
-    KeyList = map(dbschema.attr2str, keys)
+    KeyList = list(map(dbschema.attr2str, keys))
 
     # Create column_dict
-    Column_Dict = {ascii_lowercase.upper()[i]: U[i] for i in range(len(U))}
+    Column_Dict = {ascii_lowercase.upper()[i]: U[i] for i in list(range(len(U)))}
 
     # Reformat key list
     KeyList = [str("{" + ", ".join([Column_Dict[char] for char in KeyList[k]]) + "}") for k in range(len(KeyList))]
 
     return KeyList;
-
-
-
-
-
-
-

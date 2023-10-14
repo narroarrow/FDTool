@@ -1,8 +1,8 @@
-import binaryRepr
+from . import binaryRepr
 
 # Create decorator function to see how many times functions are called
 def call_counter(func):
-    
+
     def helper(*args, **kwargs):
         helper.calls += 1
         return func(*args, **kwargs);
@@ -43,15 +43,15 @@ def f(C_km1, df, Closure, U, Cardinality):
 
     # Set F to null list; Initialize U_c to remaining columns in data frame
     F = []; U_c = list(df.head(0));
-    
+
     # Identify the subsets whose cardinality of partition should be tested
     SubsetsToCheck = [list(Subset) for Subset in set([frozenset(Candidate + [v_i]) for Candidate in C_km1 for v_i in list(set(U_c).difference(Closure[binaryRepr.toBin(Candidate, U)]))])];
-    
+
     # Add singleton set to SubsetsToCheck if on first k-level
     if len(C_km1[0]) == 1: SubsetsToCheck += C_km1;
-    
+
     # Iterate through subsets mapped to the Cardinality of Partition function
-    for Cand, Card in zip(SubsetsToCheck, map(CardOfPartition, SubsetsToCheck, [df]*len(SubsetsToCheck))):
+    for Cand, Card in zip(SubsetsToCheck, list(map(CardOfPartition, SubsetsToCheck, [df]*len(SubsetsToCheck)))):
         # Add Cardinality of Partition to dictionary
         Cardinality[binaryRepr.toBin(Cand, U)] = Card;
 
@@ -65,5 +65,5 @@ def f(C_km1, df, Closure, U, Cardinality):
                 Closure[binaryRepr.toBin(Candidate, U)].add(v_i)
                 # Add list (Candidate, v_i) to F
                 F.append([tuple(Candidate), v_i]);
-    
+
     return Closure, F, Cardinality;
